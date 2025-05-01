@@ -1,0 +1,308 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Elite Haven</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
+        integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WhiteLagoon.Web.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
+        integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/spinner.css" />
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/css/apexcharts.css" />
+</head>
+
+<body>
+
+    <header>
+        <!-- Mobile Navbar -->
+        <nav class="navbar navbar-light bg-white d-lg-none fixed-top border-bottom">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index" style="color: #0A7EA3;">
+                    <i class="bi bi-building me-2" style="color: #D4AF37;"></i> Elite Haven
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+                    <span class="navbar-toggler-icon" style="filter: invert(70%) sepia(40%) saturate(600%) hue-rotate(353deg) brightness(90%) contrast(85%);"></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Desktop Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark d-none d-lg-block" style="background: linear-gradient(135deg, #0A7EA3, #00796B);">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-building me-2" style="color: #D4AF37;"></i> Elite Haven
+                </a>
+
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item mx-1">
+                            <a class="nav-link px-3 py-2" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door me-1"></i> Home
+                            </a>
+                        </li>
+                        @if (User.IsInRole(StaticDetails.RoleAdmin))
+                        {
+                            <li class="nav-item dropdown mx-1">
+                                <a class="nav-link dropdown-toggle px-3 py-2" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-gear me-1"></i> Management
+                                </a>
+                                <ul class="dropdown-menu shadow-sm" style="background-color: #0A7EA3; border: 1px solid rgba(212, 175, 55, 0.3);">
+                                    <li>
+                                        <a class="dropdown-item text-white" asp-controller="Villa" asp-action="Index">
+                                            <i class="bi bi-house me-2"></i> Villas
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-white" asp-controller="VillaNumber" asp-action="Index">
+                                            <i class="bi bi-123 me-2"></i> Villa Numbers
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider" style="border-color: rgba(212, 175, 55, 0.5);"></li>
+                                    <li>
+                                        <a class="dropdown-item text-white" asp-controller="Amenity" asp-action="Index">
+                                            <i class="bi bi-star me-2"></i> Amenities
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-white" asp-controller="Booking" asp-action="Index" asp-route-status="@StaticDetails.StatusApproved">
+                                            <i class="bi bi-calendar-check me-2"></i> Bookings
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item mx-1">
+                                <a class="nav-link px-3 py-2" asp-area="" asp-controller="Booking" asp-action="Index">
+                                    <i class="bi bi-calendar me-1"></i> Manage Booking
+                                </a>
+                            </li>
+                        }
+
+                        <li class="nav-item mx-1">
+                            <a class="nav-link px-3 py-2" asp-area="" asp-controller="Home" asp-action="About">
+                                <i class="bi bi-info-circle me-2"></i> About
+                            </a>
+                        </li>
+                        <li class="nav-item mx-1">
+                            <a class="nav-link px-3 py-2" asp-area="" asp-controller="Home" asp-action="Contact">
+                                <i class="bi bi-telephone me-2"></i> Contact
+                            </a>
+                        </li>
+
+
+
+                    </ul>
+
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel" style="background: linear-gradient(135deg, #0A7EA3, #00796B);">
+            <div class="offcanvas-header border-bottom" style="border-color: rgba(212, 175, 55, 0.3) !important;">
+                <h5 class="offcanvas-title text-white" id="sidebarMenuLabel">
+                    <i class="bi bi-building me-2" style="color: #D4AF37;"></i> Elite Haven
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body px-0">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-3 px-4" asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house-door me-2" style="color: #D4AF37;"></i> Home
+                        </a>
+                    </li>
+
+
+                    @if (User.IsInRole(StaticDetails.RoleAdmin))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white py-3 px-4" href="#" data-bs-toggle="collapse" data-bs-target="#managementCollapse">
+                                <i class="bi bi-gear me-2" style="color: #D4AF37;"></i> Management
+                            </a>
+                            <div class="collapse" id="managementCollapse">
+                                <ul class="nav flex-column ps-4" style="background-color: rgba(0, 0, 0, 0.1);">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white py-2" asp-controller="Villa" asp-action="Index">
+                                            <i class="bi bi-house me-2" style="color: #D4AF37;"></i> Villas
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white py-2" asp-controller="VillaNumber" asp-action="Index">
+                                            <i class="bi bi-123 me-2" style="color: #D4AF37;"></i> Villa Numbers
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider my-1" style="border-color: rgba(212, 175, 55, 0.5);"></li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white py-2" asp-controller="Amenity" asp-action="Index">
+                                            <i class="bi bi-star me-2" style="color: #D4AF37;"></i> Amenities
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white py-2" asp-controller="Booking" asp-action="Index" asp-route-status="@StaticDetails.StatusApproved">
+                                            <i class="bi bi-calendar-check me-2" style="color: #D4AF37;"></i> Bookings
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white py-3 px-4" asp-area="" asp-controller="Booking" asp-action="Index">
+                                <i class="bi bi-calendar me-2" style="color: #D4AF37;"></i> Manage Booking
+                            </a>
+                        </li>
+                    }
+
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-3 px-4" asp-area="" asp-controller="Home" asp-action="About">
+                            <i class="bi bi-info-circle me-2" style="color: #D4AF37;"></i> About
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-3 px-4" asp-area="" asp-controller="Home" asp-action="Contact">
+                            <i class="bi bi-telephone me-2" style="color: #D4AF37;"></i> Contact
+                        </a>
+                    </li>
+
+
+                </ul>
+
+                <div class="mt-auto border-top pt-3 px-4" style="border-color: rgba(212, 175, 55, 0.3) !important;">
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="">
+        <main role="main">
+            @* Using partial view for notification here. *@
+            <partial name="_Toastr" />
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer-section py-5" style="background: linear-gradient(135deg, #0A7EA3, #00796B); color: #fff;">
+        <div class="container">
+            <div class="row gy-4">
+                <!-- Brand Info -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-start mb-3">
+                        <i class="bi bi-building fs-2 me-2" style="color: #D4AF37;"></i>
+                        <span class="h4 mb-0" style="font-weight: 600; color: #fff;">Elite Haven</span>
+                    </div>
+                    <p class="text-center text-md-start mb-4" style="color: #E1F5FE;">
+                        Luxury resort offering premium accommodations with world-class amenities and breathtaking views.
+                    </p>
+                    <div class="d-flex justify-content-center justify-content-md-start gap-3">
+                        <a href="#" class="text-decoration-none social-icon">
+                            <i class="bi bi-facebook fs-5" style="color: #D4AF37;"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none social-icon">
+                            <i class="bi bi-instagram fs-5" style="color: #D4AF37;"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none social-icon">
+                            <i class="bi bi-twitter fs-5" style="color: #D4AF37;"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none social-icon">
+                            <i class="bi bi-linkedin fs-5" style="color: #D4AF37;"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="footer-heading mb-3" style="color: #D4AF37; font-weight: 600;">Explore</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="footer-link">Rooms & Suites</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Dining Experience</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Spa & Wellness</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Gallery</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Special Offers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-heading mb-3" style="color: #D4AF37; font-weight: 600;">Contact Us</h5>
+                    <ul class="list-unstyled contact-info">
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="bi bi-geo-alt-fill me-2 mt-1" style="color: #D4AF37;"></i>
+                            <span>123 Ocean View Drive<br>Paradise Island</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="bi bi-telephone-fill me-2" style="color: #D4AF37;"></i>
+                            <span>+1 (888) 123-4567</span>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <i class="bi bi-envelope-fill me-2" style="color: #D4AF37;"></i>
+                            <span>reservations@elitehaven.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-heading mb-3" style="color: #D4AF37; font-weight: 600;">Stay Updated</h5>
+                    <p class="mb-3" style="color: #E1F5FE;">
+                        Subscribe for exclusive offers and luxury travel tips.
+                    </p>
+                    <form class="newsletter-form">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Your Email"
+                                   style="background-color: rgba(255,255,255,0.1); border: 1px solid rgba(212, 175, 55, 0.3); color: #fff;">
+                            <button class="btn btn-newsletter" type="submit">
+                                <i class="bi bi-send-fill"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="d-flex align-items-center mt-2">
+                        <i class="bi bi-shield-check me-2" style="color: #D4AF37;"></i>
+                        <small style="color: #E1F5FE;">We respect your privacy</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="row pt-4 mt-4 border-top" style="border-color: rgba(212, 175, 55, 0.2) !important;">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0" style="color: #E1F5FE; font-size: 0.9rem;">
+                        &copy; 2025 Elite Haven. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-4">
+                        <a href="#" class="text-decoration-none footer-legal-link">Privacy Policy</a>
+                        <a href="#" class="text-decoration-none footer-legal-link">Terms of Service</a>
+                        <a href="#" class="text-decoration-none footer-legal-link">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </style>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"
+        integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/js/apexcharts.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

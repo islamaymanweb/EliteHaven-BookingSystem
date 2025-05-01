@@ -1,0 +1,220 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard | Elite Haven";
+}
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --success-green: #28a745;
+        --warning-orange: #fd7e14;
+        --danger-red: #dc3545;
+        --light-gray: #f8f9fa;
+        --dark-gray: #343a40;
+        --pink: #F0006B;
+    }
+
+    .dashboard-container {
+        padding: 2rem;
+    }
+
+    .metric-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+    .metric-title {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .metric-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--dark-gray);
+        margin: 0.5rem 0;
+    }
+
+    .metric-change {
+        font-size: 0.85rem;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 80px;
+        width: 80px;
+    }
+
+    .chart-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        height: 100%;
+    }
+
+    .chart-header {
+        padding: 1rem 1.5rem 0;
+        font-weight: 500;
+        color: var(--dark-gray);
+    }
+
+    .chart-body {
+        padding: 0 1rem 1rem;
+        height: calc(100% - 50px);
+    }
+
+    .spinner-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.8);
+        z-index: 10;
+        border-radius: 12px;
+    }
+
+    /* Specific card colors */
+    .bookings-card {
+        border-left: 4px solid var(--success-green);
+    }
+
+    .users-card {
+        border-left: 4px solid var(--warning-orange);
+    }
+
+    .revenue-card {
+        border-left: 4px solid var(--pink);
+    }
+
+    @@media (max-width: 768px) {
+        .dashboard-container {
+            padding: 1rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="dashboard-container container">
+    <div class="row g-4">
+        <!-- Bookings Card -->
+        <div class="col-md-6 col-xl-4">
+            <div class="metric-card bookings-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="metric-title">Total Bookings</div>
+                        <div class="metric-value" id="spanTotalBookingCount">XX</div>
+                        <div class="metric-change text-muted" id="sectionBookingCount"></div>
+                    </div>
+                    <div class="chart-container">
+                        <div id="totalBookingsRadialChart" data-colors='["--bs-success"]'></div>
+                        <div class="spinner-container chart-spinner" style="display:none">
+                            <div class="spinner-border text-success" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Card -->
+        <div class="col-md-6 col-xl-4">
+            <div class="metric-card users-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="metric-title">Total Users</div>
+                        <div class="metric-value" id="spanTotalUserCount">XX</div>
+                        <div class="metric-change text-muted" id="sectionUserCount"></div>
+                    </div>
+                    <div class="chart-container">
+                        <div id="totalUserRadialChart" data-colors='["--bs-warning"]'></div>
+                        <div class="spinner-container chart-spinner" style="display:none">
+                            <div class="spinner-border text-warning" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue Card -->
+        <div class="col-md-6 col-xl-4">
+            <div class="metric-card revenue-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="metric-title">Total Revenue</div>
+                        <div class="metric-value" id="spanTotalRevenueCount">XX</div>
+                        <div class="metric-change text-muted" id="sectionRevenueCount"></div>
+                    </div>
+                    <div class="chart-container">
+                        <div id="totalRevenueRadialChart" data-colors='["--pink"]'></div>
+                        <div class="spinner-container chart-spinner" style="display:none">
+                            <div class="spinner-border" style="color: var(--pink)" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Line Chart -->
+        <div class="col-xl-8">
+            <div class="chart-card h-100">
+                <div class="chart-header">New Members And Bookings (30 Days)</div>
+                <div class="chart-body">
+                    <div id="newMembersAndBookingsLineChart" data-colors='["--bs-warning","--bs-primary"]'></div>
+                    <div class="spinner-container chart-spinner" style="display:none">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="col-xl-4">
+            <div class="chart-card h-100">
+                <div class="chart-header">Customer Bookings Distribution</div>
+                <div class="chart-body">
+                    <div id="customerBookingPieChart" data-colors='["--bs-warning","--bs-success"]'></div>
+                    <div class="spinner-container chart-spinner" style="display:none">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/dashboard/getTotalBookingRadial.js"></script>
+    <script src="~/js/dashboard/getTotalUserRadial.js"></script>
+    <script src="~/js/dashboard/getTotalRevenueRadial.js"></script>
+    <script src="~/js/dashboard/radialChart.js"></script>
+    <script src="~/js/dashboard/getCustomerBookingPieChart.js"></script>
+    <script src="~/js/dashboard/getCustomerAndBookingLineChart.js"></script>
+}

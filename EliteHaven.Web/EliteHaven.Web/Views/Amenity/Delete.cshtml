@@ -1,0 +1,135 @@
+﻿@{
+    ViewData["Title"] = "Delete Amenity";
+}
+@model EntityViewModel<Amenity>
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+        --light-gray: #f8f9fa;
+        --dark-gray: #343a40;
+    }
+
+    .delete-amenity-card {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border: none;
+        overflow: hidden;
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--danger-red), #c82333);
+        color: white;
+        border-bottom: none;
+        padding: 1.25rem;
+    }
+
+    .card-body {
+        padding: 2rem;
+        background-color: white;
+    }
+
+    .form-floating > label {
+        color: var(--dark-gray);
+        font-weight: 500;
+    }
+
+    .form-control:disabled, .form-select:disabled {
+        background-color: #f9f9f9;
+        opacity: 1;
+        color: var(--dark-gray);
+        border: 1px solid #e0e0e0;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+    }
+
+    .btn-danger {
+        background-color: var(--danger-red);
+        border-color: var(--danger-red);
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+    .btn-outline-success {
+        color: var(--success-green);
+        border-color: var(--success-green);
+        border-width: 2px;
+    }
+
+        .btn-outline-success:hover {
+            color: white;
+            background-color: var(--success-green);
+        }
+
+    .warning-message {
+        color: var(--danger-red);
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background-color: rgba(220, 53, 69, 0.1);
+        border-radius: 4px;
+        border-left: 4px solid var(--danger-red);
+    }
+</style>
+
+<div class="container py-4">
+    <div class="delete-amenity-card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="m-0"><i class="bi bi-exclamation-triangle me-2"></i>Delete Amenity: @Model.Entity!.Name</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="warning-message">
+                <i class="bi bi-exclamation-circle-fill me-2"></i>
+                You are about to permanently delete this amenity. This action cannot be undone.
+            </div>
+
+            <form method="post" class="needs-validation">
+                <input asp-for="Entity!.Id" hidden />
+
+                <div class="mb-4 form-floating">
+                    <select disabled class="form-select" asp-for="@Model.Entity!.VillaId" asp-items="@Model.VillaList">
+                        <option selected>Select Villa</option>
+                    </select>
+                    <label asp-for="Entity!.VillaId"></label>
+                </div>
+
+                <div class="mb-4 form-floating">
+                    <input disabled asp-for="Entity!.Name" class="form-control" />
+                    <label asp-for="Entity!.Name"></label>
+                </div>
+
+                <div class="mb-4 form-floating">
+                    <textarea disabled asp-for="Entity!.Description" class="form-control"></textarea>
+                    <label asp-for="Entity!.Description"></label>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-6 col-md-3">
+                        <button type="submit" class="btn btn-danger w-100 py-2">
+                            <i class="bi bi-trash-fill me-2"></i>Confirm Delete
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a asp-action="Index" class="btn btn-outline-success w-100 py-2">
+                            <i class="bi bi-x-circle me-2"></i>Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

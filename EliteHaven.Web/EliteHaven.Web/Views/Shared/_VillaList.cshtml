@@ -1,0 +1,197 @@
+@model HomeViewModel
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --light-gray: #F5F5F5;
+        --dark-gray: #333333;
+    }
+
+    .villa-card {
+        transition: all 0.3s ease;
+        border: none;
+        overflow: hidden;
+    }
+
+        .villa-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+
+    .villa-image {
+        height: 250px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .villa-card:hover .villa-image {
+        transform: scale(1.03);
+    }
+
+    .villa-title {
+        color: var(--primary-blue);
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+        .villa-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--accent-gold);
+        }
+
+    .villa-price {
+        color: var(--accent-gold);
+        font-weight: 600;
+    }
+
+    .detail-btn {
+        border: 1px solid var(--primary-blue);
+        color: var(--primary-blue);
+        transition: all 0.3s ease;
+    }
+
+        .detail-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+    .amenity-icon {
+        color: var(--primary-blue);
+        margin-right: 5px;
+    }
+
+    .book-btn {
+        background: var(--accent-gold);
+        color: var(--dark-gray);
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .book-btn:hover {
+            background: #c9a227;
+            color: white;
+        }
+
+    .sold-out-btn {
+        background: #6c757d;
+        color: white;
+        cursor: not-allowed;
+    }
+</style>
+
+<div id="VillasList" class=" container-fluid px-lg-5 px-md-3">
+    <div class="row g-4">
+        @foreach (var villa in Model.VillaList!)
+        {
+            <div class="col-12 col-lg-6">
+                <div class="card villa-card shadow-sm h-100">
+                    <div class="row g-0 h-100">
+                        <!-- Villa Image -->
+                        <div class="col-md-5">
+                            <div class="h-100 overflow-hidden">
+                                @if (User.IsInRole(StaticDetails.RoleAdmin))
+                                {
+                                    <img src="~/@villa.ImageUrl" class="villa-image w-100" alt="@villa.Name" />
+                                }
+                                else
+                                {
+                                    <img src="@villa.ImageUrl" class="villa-image w-100" alt="@villa.Name" />
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Villa Details -->
+                        <div class="col-md-7">
+                            <div class="card-body d-flex flex-column h-100">
+                                <!-- Header -->
+                                <div class="mb-3">
+                                    <h4 class="villa-title mb-2">@villa.Name</h4>
+                                    <p class="text-muted small mb-3">
+                                        @Html.Raw(villa.Description!.Length > 80 ? $"{villa.Description.Substring(0, 80)}..." : villa.Description)
+                                    </p>
+                                </div>
+
+                                <!-- Amenities -->
+                                <div class="mb-auto">
+                                    <div class="d-flex mb-2">
+                                        <span class="amenity-icon"><i class="bi bi-people-fill"></i></span>
+                                        <span class="text-muted small">@villa.Occupancy Adults</span>
+                                    </div>
+                                    <div class="d-flex">
+                                        <span class="amenity-icon"><i class="bi bi-aspect-ratio"></i></span>
+                                        <span class="text-muted small">@villa.Sqft Sqft</span>
+                                    </div>
+                                </div>
+
+                                <!-- Footer -->
+                                <div class="mt-3 pt-3 border-top">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="villa-price">
+                                            @villa.Price.ToString("c") <span class="text-muted small">/ night</span>
+                                        </div>
+                                        <button type="button" class="btn btn-sm detail-btn"
+                                                data-bs-toggle="modal" data-bs-target='#villaModal-@(villa.Id)'>
+                                            <i class="bi bi-info-circle"></i> Details
+                                        </button>
+                                    </div>
+
+                                    @if (Model.CheckInDate > DateTime.Now)
+                                    {
+                                        <div class="mt-3">
+                                            @if (villa.IsAvailable)
+                                            {
+                                                <a asp-action="FinalizeBooking" asp-controller="Booking"
+                                                   asp-route-villaId="@villa.Id"
+                                                   asp-route-night="@Model.Nights"
+                                                   asp-route-checkInDate="@Model.CheckInDate"
+                                                   class="btn btn-sm w-100 book-btn">
+                                                    <i class="bi bi-calendar-check-fill"></i> Book Now
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-sm w-100 sold-out-btn" disabled>
+                                                    <i class="bi bi-x-octagon-fill"></i> Not Available
+                                                </button>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="villaModal-@(villa.Id)" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content border-0">
+                        <div class="modal-header bg-light">
+                            <h5 class="modal-title text-primary">
+                                <i class="bi bi-house-door-fill me-2"></i>@villa.Name
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-0">
+                            <partial name="_VillaDetail" model="@villa" />
+                        </div>
+                        <div class="modal-footer bg-light justify-content-center">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x-lg me-2"></i>Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

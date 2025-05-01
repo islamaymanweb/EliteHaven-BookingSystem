@@ -1,0 +1,287 @@
+﻿@model List<Amenity>
+@{
+    ViewData["Title"] = "Amenities Management";
+}
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+        --light-gray: #f8f9fa;
+        --dark-gray: #343a40;
+        --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .amenities-container {
+        max-width: 1400px;
+        margin: 2rem auto;
+    }
+    a{
+        text-decoration:none;
+    }
+    .amenities-card {
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        border: none;
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary-blue), #087192);
+        color: white;
+        padding: 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .page-title {
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .create-btn {
+        background-color: white;
+        color: var(--primary-blue);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .create-btn:hover {
+            background-color: #f0f8ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+    .card-body {
+        padding: 2rem;
+        background-color: white;
+    }
+
+    .amenities-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .amenities-table thead th {
+            background-color: #f8fafc;
+            color: var(--dark-gray);
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+        }
+
+        .amenities-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+            .amenities-table tbody tr:not(:last-child) {
+                border-bottom: 1px solid #edf2f7;
+            }
+
+            .amenities-table tbody tr:hover {
+                background-color: #f8fafc;
+            }
+
+        .amenities-table td {
+            padding: 1.25rem 1.5rem;
+            vertical-align: middle;
+        }
+
+    .amenity-name {
+        font-weight: 500;
+        color: var(--dark-gray);
+    }
+
+    .amenity-description {
+        color: #64748b;
+        max-width: 400px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .villa-name {
+        background-color: #f0fdf4;
+        color: var(--success-green);
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+    }
+
+    .btn-edit {
+        background-color: rgba(10, 126, 163, 0.1);
+        color: var(--primary-blue);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .btn-edit:hover {
+            background-color: rgba(10, 126, 163, 0.2);
+        }
+
+    .btn-delete {
+        background-color: rgba(220, 53, 69, 0.1);
+        color: var(--danger-red);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .btn-delete:hover {
+            background-color: rgba(220, 53, 69, 0.2);
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #64748b;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        color: #cbd5e1;
+        margin-bottom: 1rem;
+    }
+
+    @@media (max-width: 768px) {
+        .card-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .amenities-table thead {
+            display: none;
+        }
+
+        .amenities-table tbody tr {
+            display: block;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .amenities-table td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border: none;
+        }
+
+            .amenities-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--dark-gray);
+                margin-right: 1rem;
+            }
+
+        .action-buttons {
+            justify-content: flex-start;
+            margin-top: 1rem;
+        }
+    }
+</style>
+
+<div class="amenities-container">
+    <div class="amenities-card">
+        <div class="card-header">
+            <h1 class="page-title">
+                <i class="bi bi-list-check"></i>
+                Amenities Management
+            </h1>
+            <a asp-controller="Amenity" asp-action="Create" class="create-btn">
+                <i class="bi bi-plus-lg"></i>
+                Add New Amenity
+            </a>
+        </div>
+
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="amenities-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Villa</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var amenity in Model)
+                            {
+                                <tr>
+                                    <td data-label="Name" class="amenity-name">@amenity.Name</td>
+                                    <td data-label="Description" class="amenity-description">@amenity.Description</td>
+                                    <td data-label="Villa"><span class="villa-name">@amenity.Villa!.Name</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a asp-action="Update" asp-controller="Amenity" asp-route-Id="@amenity.Id" class="btn-edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                                Edit
+                                            </a>
+                                            <a asp-action="Delete" asp-controller="Amenity" asp-route-Id="@amenity.Id" class="btn-delete">
+                                                <i class="bi bi-trash"></i>
+                                                Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="bi bi-list"></i>
+                    </div>
+                    <h3>No Amenities Found</h3>
+                    <p>Get started by adding your first amenity</p>
+                    <a asp-controller="Amenity" asp-action="Create" class="create-btn mt-3">
+                        <i class="bi bi-plus-lg"></i>
+                        Create Amenity
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

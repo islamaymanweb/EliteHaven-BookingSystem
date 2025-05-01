@@ -1,0 +1,299 @@
+﻿@model IEnumerable<Booking>
+@{
+    ViewData["Title"] = "Booking Management";
+    string status = Context.Request.Query["status"];
+}
+
+<style>
+    :root {
+        --primary: #0A7EA3;
+        --primary-light: #5DB7DE;
+        --accent: #D4AF37;
+        --light-bg: #F8F9FA;
+        --dark-text: #212529;
+        --gray-border: #DEE2E6;
+        --pending: #FFC107;
+        --approved: #17A2B8;
+        --checked-in: #28A745;
+        --completed: #6C757D;
+        --cancelled: #DC3545;
+    }
+
+    a {
+        text-decoration: none;
+    }
+    .booking-dashboard {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .dashboard-header {
+        background: var(--primary);
+        color: white;
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .status-filters {
+        display: flex;
+        gap: 0.5rem;
+        padding: 1rem;
+        overflow-x: auto;
+        background: var(--light-bg);
+    }
+
+    .status-filter {
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        background: white;
+        color: var(--dark-text);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+        .status-filter:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-filter.active {
+            color: white;
+        }
+
+        .status-filter[data-status="Pending"] {
+            background: var(--pending);
+        }
+
+        .status-filter[data-status="Approved"] {
+            background: var(--approved);
+        }
+
+        .status-filter[data-status="CheckedIn"] {
+            background: var(--checked-in);
+        }
+
+        .status-filter[data-status="Completed"] {
+            background: var(--completed);
+        }
+
+        .status-filter[data-status="Cancelled"] {
+            background: var(--cancelled);
+        }
+
+    .booking-table-container {
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    .booking-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+
+        .booking-table th {
+            background: var(--light-bg);
+            color: var(--dark-text);
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--gray-border);
+        }
+
+        .booking-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-border);
+            vertical-align: middle;
+        }
+
+        .booking-table tr:last-child td {
+            border-bottom: none;
+        }
+
+    .status-indicator {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .status-pending {
+        background: rgba(255, 193, 7, 0.1);
+        color: var(--pending);
+    }
+
+    .status-approved {
+        background: rgba(23, 162, 184, 0.1);
+        color: var(--approved);
+    }
+
+    .status-checkedin {
+        background: rgba(40, 167, 69, 0.1);
+        color: var(--checked-in);
+    }
+
+    .status-completed {
+        background: rgba(108, 117, 125, 0.1);
+        color: var(--completed);
+    }
+
+    .status-cancelled {
+        background: rgba(220, 53, 69, 0.1);
+        color: var(--cancelled);
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        background: var(--primary);
+        color: white;
+        font-size: 0.85rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .action-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+    .empty-state {
+        padding: 3rem;
+        text-align: center;
+        color: var(--dark-text);
+    }
+
+    @@media (max-width: 768px) {
+        .booking-table th,
+        .booking-table td {
+            padding: 0.75rem 0.5rem;
+        }
+
+        .status-filters {
+            padding: 0.75rem;
+        }
+
+        .status-filter {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .booking-table {
+            font-size: 0.85rem;
+        }
+
+        .status-filter {
+            padding: 0.5rem 0.75rem;
+        }
+    }
+</style>
+
+<div class="booking-dashboard container mt-5">
+    <div class="dashboard-header">
+        <h2 class="mb-0"><i class="bi bi-calendar-check me-2"></i>Booking Management</h2>
+    </div>
+
+    <div class="status-filters">
+        <a asp-controller="Booking" asp-action="Index"
+           class="status-filter @(status == null ? "active" : "")"
+           data-status="All">
+            All Bookings
+        </a>
+        <a asp-controller="Booking" asp-action="Index" asp-route-status="@StaticDetails.StatusPending"
+           class="status-filter @(status == StaticDetails.StatusPending ? "active" : "")"
+           data-status="Pending">
+            @StaticDetails.StatusPending
+        </a>
+        <a asp-controller="Booking" asp-action="Index" asp-route-status="@StaticDetails.StatusApproved"
+           class="status-filter @(status == StaticDetails.StatusApproved ? "active" : "")"
+           data-status="Approved">
+            @StaticDetails.StatusApproved
+        </a>
+        <a asp-controller="Booking" asp-action="Index" asp-route-status="@StaticDetails.StatusCheckIn"
+           class="status-filter @(status == StaticDetails.StatusCheckIn ? "active" : "")"
+           data-status="CheckedIn">
+            @StaticDetails.StatusCheckIn
+        </a>
+        <a asp-controller="Booking" asp-action="Index" asp-route-status="@StaticDetails.StatusCompleted"
+           class="status-filter @(status == StaticDetails.StatusCompleted ? "active" : "")"
+           data-status="Completed">
+            @StaticDetails.StatusCompleted
+        </a>
+        <a asp-controller="Booking" asp-action="Index" asp-route-status="@StaticDetails.StatusCancelled"
+           class="status-filter @(status == StaticDetails.StatusCancelled ? "active" : "")"
+           data-status="Cancelled">
+            @StaticDetails.StatusCancelled
+        </a>
+    </div>
+
+    <div class="booking-table-container">
+        @if (Model.Any())
+        {
+            <table class="booking-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Guest</th>
+                        <th>Status</th>
+                        <th>Duration</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var booking in Model)
+                    {
+                        <tr>
+                            <td>#@booking.Id</td>
+                            <td>@booking.Email</td>
+                            <td>
+                                <span class="status-indicator status-@booking.Status.ToLower()">
+                                    @booking.Status
+                                </span>
+                            </td>
+                            <td>@booking.Nights night(s)</td>
+                            <td><strong>@booking.TotalCost.ToString("c")</strong></td>
+                            <td>
+                                <a asp-action="BookingDetails" asp-controller="Booking"
+                                   asp-route-bookingId="@booking.Id"
+                                   class="action-btn">
+                                    <i class="bi bi-eye"></i> Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="bi bi-calendar-x" style="font-size: 2rem; color: var(--gray-border);"></i>
+                <p class="mt-3">No bookings found</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/booking.js"></script>
+}

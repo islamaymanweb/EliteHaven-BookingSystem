@@ -1,0 +1,252 @@
+﻿@{
+    ViewData["Title"] = "Create Villa | Elite Haven";
+}
+@model Villa
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --light-gray: #F5F5F5;
+        --dark-gray: #333333;
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+    }
+
+    a {
+        text-decoration: none;
+    }
+    .villa-form-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        border-top: 2px solid var(--secondary-blue);
+    }
+
+    .form-header {
+        background: linear-gradient(90deg, var(--primary-blue), var(--dark-teal));
+        color: white;
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .form-title {
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .form-body {
+        padding: 2rem;
+    }
+
+    .form-floating label {
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .form-control {
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ced4da;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 0.25rem rgba(93, 183, 222, 0.25);
+        }
+
+    textarea.form-control {
+        min-height: 120px;
+    }
+
+    .file-upload {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .file-upload-label {
+        display: block;
+        font-weight: 500;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+    }
+
+    .file-upload-input {
+        width: 100%;
+        height: calc(2.5rem + 2px);
+        opacity: 0;
+        position: absolute;
+        z-index: 2;
+    }
+
+    .file-upload-display {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border: 1px dashed #ced4da;
+        border-radius: 6px;
+        background: var(--light-gray);
+    }
+
+    .file-upload-text {
+        margin-left: 0.5rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .submit-btn {
+        background: var(--accent-gold);
+        color: var(--dark-gray);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .submit-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .cancel-btn {
+        background: transparent;
+        color: var(--danger-red);
+        border: 1px solid var(--danger-red);
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .cancel-btn:hover {
+            background: var(--danger-red);
+            color: white;
+        }
+
+    .validation-summary {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 6px;
+        background-color: rgba(220, 53, 69, 0.1);
+    }
+
+        .validation-summary ul {
+            margin-bottom: 0;
+            padding-left: 1.5rem;
+        }
+
+    .validation-message {
+        color: var(--danger-red);
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+
+    @@media (max-width: 768px) {
+        .form-body {
+            padding: 1.5rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+    }
+</style>
+
+<div class="villa-form-container container">
+    <div class="form-header text-center">
+        <h2 class="form-title"><i class="bi bi-house-add"></i> Create New Villa</h2>
+    </div>
+
+    <div class="form-body">
+        <form method="post" enctype="multipart/form-data">
+            @if (ViewData.ModelState.ErrorCount > 0)
+            {
+                <div class="validation-summary" asp-validation-summary="All"></div>
+            }
+
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <input asp-for="Name" class="form-control" placeholder="Villa Name" />
+                        <label asp-for="Name"></label>
+                        <span asp-validation-for="Name" class="validation-message"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <textarea asp-for="Description" class="form-control" placeholder="Description" style="height: 120px;"></textarea>
+                        <label asp-for="Description"></label>
+                        <span asp-validation-for="Description" class="validation-message"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input asp-for="Price" class="form-control" placeholder="Price" />
+                        <label asp-for="Price"></label>
+                        <span asp-validation-for="Price" class="validation-message"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input asp-for="Sqft" class="form-control" placeholder="Square Feet" />
+                        <label asp-for="Sqft"></label>
+                        <span asp-validation-for="Sqft" class="validation-message"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input asp-for="Occupancy" class="form-control" placeholder="Occupancy" />
+                        <label asp-for="Occupancy"></label>
+                        <span asp-validation-for="Occupancy" class="validation-message"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="file-upload">
+                        <label class="file-upload-label">Villa Image</label>
+                        <input asp-for="Image" class="file-upload-input" id="fileInput" />
+                        <div class="file-upload-display">
+                            <i class="bi bi-cloud-arrow-up" style="font-size: 1.25rem;"></i>
+                            <span class="file-upload-text" id="fileName">Click to upload image</span>
+                        </div>
+                        <input asp-for="ImageUrl" hidden />
+                        <span asp-validation-for="Image" class="validation-message"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="submit-btn">
+                    <i class="bi bi-check-circle"></i> Create Villa
+                </button>
+                <a asp-action="Index" class="cancel-btn">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'Click to upload image';
+            document.getElementById('fileName').textContent = fileName;
+        });
+    </script>
+}

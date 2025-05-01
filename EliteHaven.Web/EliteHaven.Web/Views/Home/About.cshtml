@@ -1,0 +1,201 @@
+﻿@{
+    ViewData["Title"] = "About Elite Haven";
+}
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --light-azure: #E1F5FE;
+        --dark-teal: #00796B;
+        --pure-white: #FFFFFF;
+        --light-gray: #F5F5F5;
+        --dark-gray: #333333;
+    }
+
+    .section-title {
+        color: var(--primary-blue);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+        color: var(--dark-gray);
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .feature-card {
+        background-color: var(--pure-white);
+        border: none;
+        border-radius: 1rem;
+        padding: 2rem;
+        height: 100%;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .feature-icon {
+        color: var(--accent-gold);
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .highlight-text {
+        color: var(--dark-teal);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .btn-custom {
+        background-color: var(--primary-blue);
+        color: var(--pure-white);
+        border: none;
+        padding: 0.75rem 1.75rem;
+        transition: all 0.3s ease;
+    }
+
+        .btn-custom:hover {
+            background-color: var(--dark-teal);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+    .about-description {
+        color: var(--dark-gray);
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+    }
+
+    .benefit-item {
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .villa-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-container {
+        height: 100%;
+        min-height: 350px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 1rem;
+        background-color: var(--light-azure);
+    }
+
+    @@media (max-width: 768px) {
+        .image-container {
+            min-height: 250px;
+            margin-bottom: 2rem;
+        }
+    }
+</style>
+
+<div class="container my-5 py-4">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="section-title display-4">
+            About <span style="color: var(--accent-gold);">Elite Haven</span>
+        </h1>
+        <p class="section-subtitle">
+            Discover your dream villa getaway with elegance and comfort
+        </p>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="row align-items-center g-5 mb-5">
+        <div class="col-lg-6">
+            <div class="image-container">
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                     alt="Luxury Villa by Elite Haven"
+                     class="villa-image">
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <h2 class="highlight-text mb-4">
+                <i class="bi bi-house-heart-fill me-2"></i> Welcome to Elite Haven
+            </h2>
+            <p class="about-description">
+                At Elite Haven, we believe that luxury, comfort, and convenience are essential for a perfect holiday experience.
+                Our platform offers a wide selection of exquisite villas designed to meet all your expectations — whether you seek a romantic escape, a family retreat, or a group getaway.
+            </p>
+
+            <div class="mb-4">
+                <div class="benefit-item">
+                    <i class="bi bi-check-circle-fill" style="color: var(--accent-gold);"></i>
+                    <span>Curated list of premium villas worldwide</span>
+                </div>
+                <div class="benefit-item">
+                    <i class="bi bi-check-circle-fill" style="color: var(--accent-gold);"></i>
+                    <span>Easy and secure online booking process</span>
+                </div>
+                <div class="benefit-item">
+                    <i class="bi bi-check-circle-fill" style="color: var(--accent-gold);"></i>
+                    <span>Flexible check-in options with dedicated support</span>
+                </div>
+                <div class="benefit-item">
+                    <i class="bi bi-check-circle-fill" style="color: var(--accent-gold);"></i>
+                    <span>Competitive pricing with no hidden fees</span>
+                </div>
+            </div>
+
+            <a href="/" class="btn btn-lg rounded-pill mt-3 btn-custom">
+                <i class="bi bi-house-door-fill me-2"></i> Start Your Journey
+            </a>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-geo-alt-fill feature-icon"></i>
+                    <h5 class="highlight-text">Prime Locations</h5>
+                    <p class="about-description">
+                        Hand-picked villas at the world's most stunning destinations, from tropical beaches to mountain retreats.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-stars feature-icon"></i>
+                    <h5 class="highlight-text">Exceptional Quality</h5>
+                    <p class="about-description">
+                        Each villa is personally inspected to ensure the highest standards of luxury and comfort.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-shield-lock-fill feature-icon"></i>
+                    <h5 class="highlight-text">Secure Booking</h5>
+                    <p class="about-description">
+                        Enjoy a safe and seamless reservation process with our encrypted payment system.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

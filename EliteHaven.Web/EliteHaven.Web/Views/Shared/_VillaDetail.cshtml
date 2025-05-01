@@ -1,0 +1,54 @@
+@model Villa
+
+<div class="row py-4" style="background-color: var(--light-gray); --primary-blue: #0A7EA3; --secondary-blue: #5DB7DE; --accent-gold: #D4AF37; --light-azure: #E1F5FE; --dark-teal: #00796B; --pure-white: #FFFFFF; --light-gray: #F5F5F5; --dark-gray: #333333;">
+    <div class="col-12 col-md-5 d-flex align-items-center justify-content-center mb-3 mb-md-0">
+        <div class="w-100" style="overflow: hidden; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+            <img src="@Url.Content(Model.ImageUrl)" class="img-fluid" style="width: 100%; height: 300px; object-fit: cover;" alt="@Model.Name" />
+        </div>
+    </div>
+
+    <div class="col-12 col-md-7">
+        <div class="h-100 d-flex flex-column justify-content-between p-3" style="background-color: var(--pure-white); border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+            
+            <div>
+                <h2 style="color: var(--primary-blue); font-weight: 700;">@Model.Name</h2>
+
+                <p style="color: var(--dark-gray); font-size: 1.1rem; margin-top: 15px;">
+                    @Html.Raw(Model.Description)
+                </p>
+
+                @if (Model.VillaAmenity is not null && Model.VillaAmenity.Count() > 0)
+                {
+                    <div class="mt-4">
+                        <h5 style="color: var(--dark-teal); font-weight: bold;">Villa Amenities</h5>
+                        <div class="d-flex flex-wrap mt-2">
+                            @foreach (var amenity in Model.VillaAmenity!)
+                            {
+                                <span class="badge rounded-pill text-white m-1" style="background-color: var(--primary-blue); font-size: 0.9rem;">@amenity.Name</span>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="mt-4">
+                <div class="d-flex flex-wrap justify-content-between text-center">
+                    <div class="p-2">
+                        <strong style="color: var(--secondary-blue);">Occupancy:</strong> @Model.Occupancy Adults
+                    </div>
+                    <div class="p-2">
+                        <strong style="color: var(--secondary-blue);">Size:</strong> @Model.Sqft sqft
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <span style="font-size: 1.5rem; font-weight: bold; color: var(--accent-gold);">
+                        @Model.Price.ToString("c") 
+                        <span style="font-size: 1rem; color: var(--dark-teal);">/ night</span>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

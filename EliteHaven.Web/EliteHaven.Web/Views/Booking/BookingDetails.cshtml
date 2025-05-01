@@ -1,0 +1,270 @@
+﻿@{
+    ViewData["Title"] = "Booking Details";
+}
+@model Booking
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --light-gray: #F5F5F5;
+        --dark-gray: #333333;
+        --success-green: #28a745;
+        --warning-orange: #fd7e14;
+        --danger-red: #dc3545;
+    }
+
+    .booking-detail-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .section-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .section-title {
+        font-weight: 600;
+        color: var(--primary-blue);
+        margin: 0;
+    }
+
+    .back-btn {
+        background: var(--light-gray);
+        color: var(--dark-gray);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+
+        .back-btn:hover {
+            background: var(--secondary-blue);
+            color: white;
+        }
+
+    .villa-detail-section, .booking-form-section {
+        padding: 1.5rem;
+    }
+
+    .booking-form-section {
+        border-left: 1px solid var(--light-gray);
+    }
+
+    .total-price {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--accent-gold);
+        padding: 1rem 0;
+        border-top: 1px solid var(--light-gray);
+        margin-top: 1rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: var(--dark-gray);
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        border-radius: 6px;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:disabled {
+            background-color: var(--light-gray);
+        }
+
+    .action-btn {
+        padding: 0.75rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .btn-checkin {
+        background: var(--warning-orange);
+        color: white;
+    }
+
+    .btn-checkout {
+        background: var(--success-green);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: var(--danger-red);
+        border: 1px solid var(--danger-red);
+    }
+
+        .btn-cancel:hover {
+            background: var(--danger-red);
+            color: white;
+        }
+
+    @@media (max-width: 992px) {
+        .booking-form-section {
+            border-left: none;
+            border-top: 1px solid var(--light-gray);
+        }
+    }
+</style>
+
+<div class="booking-detail-container">
+    <div class="row g-0">
+        <!-- Villa Details Section -->
+        <div class="col-lg-6">
+            <div class="villa-detail-section">
+                <div class="section-header">
+                    <h3 class="section-title"><i class="bi bi-house-door"></i> Villa Details</h3>
+                    <a asp-controller="Booking" asp-action="Index" asp-route-status="@StaticDetails.StatusApproved"
+                       class="back-btn">
+                        <i class="bi bi-arrow-left-circle"></i> Back to Bookings
+                    </a>
+                </div>
+
+                <partial name="_VillaDetail" model="@Model.Villa" />
+
+                <div class="total-price text-end">
+                    Booking Total: @Model.TotalCost.ToString("c")
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Form Section -->
+        <div class="col-lg-6">
+            <div class="booking-form-section">
+                <form method="post">
+                    <input asp-for="VillaId" hidden />
+                    <input asp-for="Id" hidden />
+                    <input asp-for="UserId" hidden />
+                    <input type="datetime" asp-for="CheckInDate" hidden />
+                    <input asp-for="CheckOutDate" hidden />
+                    <input asp-for="Nights" hidden />
+
+                    <div class="section-header">
+                        <h3 class="section-title"><i class="bi bi-pencil-square"></i> Booking Details</h3>
+                        @if (Model.Status == StaticDetails.StatusPending || Model.Status == StaticDetails.StatusApproved
+                        && User.IsInRole(StaticDetails.RoleAdmin))
+                        {
+                            <button asp-controller="Booking" asp-action="CancelBooking" type="submit"
+                                    class="btn btn-sm btn-cancel">
+                                <i class="bi bi-x-circle"></i> Cancel Booking
+                            </button>
+                        }
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Name</label>
+                            <input class="form-control" asp-for="Name" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone</label>
+                            <input class="form-control" asp-for="Phone" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input class="form-control" asp-for="Email" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nights</label>
+                            <input class="form-control" asp-for="Nights" disabled />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Status</label>
+                            <input class="form-control" asp-for="Status" disabled />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Booking Date</label>
+                            <input class="form-control" asp-for="BookingDate" disabled />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Check-in Date</label>
+                            <input class="form-control" asp-for="CheckInDate" disabled />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Actual Check-in</label>
+                            <input class="form-control" asp-for="ActualCheckInDate" disabled />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Check-out Date</label>
+                            <input class="form-control" asp-for="CheckOutDate" disabled />
+                        </div>
+
+                        @if (Model.Status == StaticDetails.StatusApproved && User.IsInRole(StaticDetails.RoleAdmin))
+                        {
+                            <div class="col-md-6">
+                                <label class="form-label">Villa Number</label>
+                                <select asp-for="VillaNumber" class="form-select">
+                                    @foreach (var villaNumber in Model.VillaNumbers!)
+                                    {
+                                        <option value="@villaNumber.Villa_Number">@villaNumber.Villa_Number</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                        else
+                        {
+                            <input asp-for="VillaNumber" hidden />
+                            if (Model.Status == StaticDetails.StatusCheckIn || Model.Status == StaticDetails.StatusCompleted)
+                            {
+                                <div class="col-md-6">
+                                    <label class="form-label">Villa Number</label>
+                                    <input class="form-control" asp-for="VillaNumber" disabled />
+                                </div>
+                            }
+                        }
+
+                        @if (Model.IsPaymentSuccessful && User.IsInRole(StaticDetails.RoleAdmin))
+                        {
+                            <div class="col-md-6">
+                                <label class="form-label">Payment Intent ID</label>
+                                <input class="form-control" asp-for="StripePaymentIntentId" disabled />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Session ID</label>
+                                <input class="form-control" asp-for="StripeSessionId" disabled />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Payment Date</label>
+                                <input class="form-control" asp-for="PaymentDate" disabled />
+                            </div>
+                        }
+                    </div>
+
+                    @if (User.IsInRole(StaticDetails.RoleAdmin))
+                    {
+                        <div class="mt-4">
+                            @if (Model.Status == StaticDetails.StatusApproved)
+                            {
+                                <button asp-controller="Booking" asp-action="CheckIn" type="submit"
+                                        class="btn action-btn btn-checkin">
+                                    <i class="bi bi-check2-square"></i> Check In
+                                </button>
+                            }
+                            @if (Model.Status == StaticDetails.StatusCheckIn)
+                            {
+                                <button asp-controller="Booking" asp-action="CheckOut" type="submit"
+                                        class="btn action-btn btn-checkout">
+                                    <i class="bi bi-clipboard2-check"></i> Check Out
+                                </button>
+                            }
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

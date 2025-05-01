@@ -1,0 +1,200 @@
+﻿@model IEnumerable<VillaNumber>
+@{
+    ViewData["Title"] = "Villa Numbers | Elite Haven";
+}
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --light-gray: #F5F5F5;
+        --dark-gray: #333333;
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+    }
+    a{
+        text-decoration:none;
+    }
+
+    .villa-numbers-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+
+    }
+
+    .management-header {
+        background: linear-gradient(90deg, var(--primary-blue), var(--dark-teal));
+        color: white;
+        padding: 1.5rem;
+        border-top: 2px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top:30px;
+    }
+
+    .management-title {
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .create-btn {
+        background: var(--accent-gold);
+        color: var(--dark-gray);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        .create-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 126, 163, 0.2);
+        }
+
+    .villa-numbers-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .villa-numbers-table th {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .villa-numbers-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .villa-numbers-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .villa-numbers-table tr:hover {
+            background-color: rgba(93, 183, 222, 0.05);
+        }
+
+    .action-btn {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .edit-btn {
+        background: var(--primary-blue);
+        color: white;
+    }
+
+        .edit-btn:hover {
+            background: var(--secondary-blue);
+            transform: translateY(-2px);
+        }
+
+    .delete-btn {
+        background: var(--danger-red);
+        color: white;
+    }
+
+        .delete-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+    .action-group {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .special-details {
+        max-width: 300px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @@media (max-width: 768px) {
+        .villa-numbers-table {
+            display: block;
+            overflow-x: auto;
+        }
+
+        .action-group {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .special-details {
+            max-width: 150px;
+        }
+    }
+</style>
+
+<div class="villa-numbers-container container">
+    <div class="management-header d-flex justify-content-between align-items-center">
+        <h2 class="management-title"><i class="bi bi-123 me-2"></i>Villa Numbers Management</h2>
+        <a asp-controller="VillaNumber" asp-action="Create" class="create-btn">
+            <i class="bi bi-plus-circle me-2"></i>Create New
+        </a>
+    </div>
+
+    <div class="p-4">
+        <div class="table-responsive">
+            <table class="villa-numbers-table">
+                <thead>
+                    <tr>
+                        <th>Villa Name</th>
+                        <th>Number</th>
+                        <th>Special Details</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var villaNumber in Model)
+                    {
+                        <tr>
+                            <td>@villaNumber.Villa!.Name</td>
+                            <td><strong>@villaNumber.Villa_Number</strong></td>
+                            <td class="special-details" title="@villaNumber.SpecialDetails">
+                                @(string.IsNullOrEmpty(villaNumber.SpecialDetails) ? "N/A" : villaNumber.SpecialDetails)
+                            </td>
+                            <td>
+                                <div class="action-group">
+                                    <a asp-action="Update" asp-controller="VillaNumber" asp-route-Id="@villaNumber.Villa_Number"
+                                       class="action-btn edit-btn">
+                                        <i class="bi bi-pencil-fill"></i>Edit
+                                    </a>
+                                    <a asp-action="Delete" asp-controller="VillaNumber" asp-route-Id="@villaNumber.Villa_Number"
+                                       class="action-btn delete-btn">
+                                        <i class="bi bi-trash-fill"></i>Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

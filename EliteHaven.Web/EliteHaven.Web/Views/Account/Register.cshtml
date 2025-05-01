@@ -1,0 +1,252 @@
+@* @{
+    ViewData["Title"] = "Register";
+}
+@model RegisterViewModel
+
+<div class="container pt-5 pb-5">
+    <div class="card shadow border ">
+        <div class="card-header ml-0 py-4">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="py-2">Register</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="row pt-3">
+                <div class="col-md-12">
+                    <form class="row" method="post">
+                        <input asp-for="RedirectUrl" hidden />
+                        <div class="form-floating mb-3 col-md-12">
+                            <input class="form-control" asp-for="Email" aria-required="true" />
+                            <label class="ms-2 text-muted" asp-for="Email"></label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating mb-3 col-md-6">
+                            <input asp-for="Name" class="form-control" />
+                            <label class="ms-2 text-muted">Name</label>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating mb-3 col-md-6">
+                            <input class="form-control" asp-for="PhoneNumber" />
+                            <label class="ms-2 text-muted">Phone Number</label>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating mb-3 col-md-6">
+                            <input class="form-control" asp-for="Password" />
+                            <label class="ms-2 text-muted">Password</label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating mb-3 col-md-6">
+                            <input class="form-control" asp-for="ConfirmPassword" />
+                            <label class="ms-2 text-muted">Confirm Password</label>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Select Role</label>
+                            <select asp-for="Role" class="form-select p-3" asp-Items="@Model.RoleList">
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="w-100 btn btn-lg btn-outline-success">Register</button>
+                        </div>
+                        <a asp-action="Login" style="margin-top: 13px;">Already having an account? login here</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+} *@
+@{
+    ViewData["Title"] = "Register";
+}
+@model RegisterViewModel
+
+<div class="register-container">
+    <div class="register-wrapper">
+        <div class="register-card">
+            <!-- Left Side - Graphic -->
+            <div class="register-graphic" style="background: linear-gradient(rgba(10, 126, 163, 0.5), rgba(0, 121, 107, 0.5)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;">
+                <div class="graphic-content">
+                    <i class="bi bi-building" style="color: #D4AF37; font-size: 3rem;"></i>
+                    <h2>Join <span style="color: #D4AF37;">Elite Haven</span></h2>
+                    <p>Experience luxury redefined</p>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle" style="color: #D4AF37;"></i>
+                            <span>Premium accommodations</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle" style="color: #D4AF37;"></i>
+                            <span>World-class amenities</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle" style="color: #D4AF37;"></i>
+                            <span>Exclusive member benefits</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Side - Form -->
+            <div class="register-form">
+                <div class="form-header">
+                    <h3>Create Account</h3>
+                    <p>Start your luxury journey</p>
+                </div>
+                
+                <form method="post" class="register-form-content">
+                    <input asp-for="RedirectUrl" hidden />
+                    
+                    <div class="row g-3">
+                        <!-- Email -->
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label asp-for="Email">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-icon"><i class="bi bi-envelope" style="color: #0A7EA3;"></i></span>
+                                    <input asp-for="Email" class="form-control" placeholder="your@email.com" required>
+                                </div>
+                                <span asp-validation-for="Email" class="validation-error"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Name -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-icon"><i class="bi bi-person" style="color: #0A7EA3;"></i></span>
+                                    <input asp-for="Name" class="form-control" placeholder="John Doe" required>
+                                </div>
+                                <span asp-validation-for="Name" class="validation-error"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Phone -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-icon"><i class="bi bi-phone" style="color: #0A7EA3;"></i></span>
+                                    <input asp-for="PhoneNumber" class="form-control" placeholder="+1234567890">
+                                </div>
+                                <span asp-validation-for="PhoneNumber" class="validation-error"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Password -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Password">Password</label>
+                                <div class="input-group">
+                                    <span class="input-icon"><i class="bi bi-lock" style="color: #0A7EA3;"></i></span>
+                                    <input type="password" asp-for="Password" class="form-control" placeholder="••••••••" required>
+                                    <button type="button" class="password-toggle">
+                                        <i class="bi bi-eye" style="color: #0A7EA3;"></i>
+                                    </button>
+                                </div>
+                                <span asp-validation-for="Password" class="validation-error"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Confirm Password -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="ConfirmPassword">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-icon"><i class="bi bi-lock" style="color: #0A7EA3;"></i></span>
+                                    <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="••••••••" required>
+                                    <button type="button" class="password-toggle">
+                                        <i class="bi bi-eye" style="color: #0A7EA3;"></i>
+                                    </button>
+                                </div>
+                                <span asp-validation-for="ConfirmPassword" class="validation-error"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Role Selection -->
+                       @*  <div class="col-12">
+                            <div class="form-group">
+                                <label>Select Role</label>
+                                <select asp-for="Role" class="form-select" asp-items="@Model.RoleList" required>
+                                    <option value="" disabled selected>Select your role</option>
+                                </select>
+                            </div>
+                        </div> *@
+                        
+                        <!-- Submit Button -->
+                        <div class="col-12">
+                            <button type="submit" class="register-btn">
+                                <i class="bi bi-person-plus"></i> Create Account
+                            </button>
+                        </div>
+                        
+                        <!-- Login Link -->
+                        <div class="col-12">
+                            <div class="register-footer">
+                                <p>Already have an account? <a asp-action="Login" class="login-link">Sign in</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Toggle password visibility
+        document.querySelectorAll('.password-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const input = this.closest('.input-group').querySelector('input');
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('bi-eye', 'bi-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('bi-eye-slash', 'bi-eye');
+                }
+            });
+        });
+        
+        // Form validation
+        (function() {
+            'use strict';
+            
+            const forms = document.querySelectorAll('.needs-validation');
+            
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+}

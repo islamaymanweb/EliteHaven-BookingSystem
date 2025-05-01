@@ -1,0 +1,261 @@
+﻿@{
+    ViewData["Title"] = "Delete Villa | Elite Haven";
+}
+@model Villa
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --light-gray: #F5F5F5;
+        --dark-gray: #333333;
+        --danger-red: #dc3545;
+        --success-green: #28a745;
+    }
+  a{
+      text-decoration:none;
+  }
+
+    .delete-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .delete-header {
+        background: linear-gradient(135deg, var(--danger-red), #c82333);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .delete-title {
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .delete-body {
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 2rem;
+    }
+
+    .warning-alert {
+        background-color: rgba(220, 53, 69, 0.1);
+        border-left: 4px solid var(--danger-red);
+        padding: 1rem;
+        border-radius: 0 6px 6px 0;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .form-floating label {
+        color: var(--dark-gray);
+        font-weight: 500;
+    }
+
+    .form-control:disabled {
+        background-color: #f9f9f9;
+        color: var(--dark-gray);
+        border: 1px solid #e0e0e0;
+        cursor: not-allowed;
+    }
+
+    .villa-image-container {
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--light-gray);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .villa-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+
+    .image-deletion-note {
+        margin-top: 1rem;
+        color: var(--danger-red);
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-delete {
+        background-color: var(--danger-red);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+        }
+
+    .btn-cancel {
+        background-color: transparent;
+        color: var(--success-green);
+        border: 2px solid var(--success-green);
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .btn-cancel:hover {
+            background-color: var(--success-green);
+            color: white;
+        }
+
+    @@media (max-width: 992px) {
+        .delete-body {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .delete-container {
+            margin: 1rem;
+        }
+
+        .delete-body {
+            padding: 1.5rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-delete, .btn-cancel {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="delete-container">
+    <div class="delete-header">
+        <h2 class="delete-title">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            Delete Villa: @Model.Name
+        </h2>
+    </div>
+
+    <div class="delete-body">
+        <div class="form-section">
+            <form method="post">
+                <input asp-for="Id" hidden />
+
+                <div class="warning-alert">
+                    <i class="bi bi-exclamation-octagon-fill text-danger" style="font-size: 1.25rem;"></i>
+                    <div>
+                        <h5 class="text-danger mb-2">Permanent Deletion Warning</h5>
+                        <p class="mb-0">This action will permanently delete the villa and all associated data. This cannot be undone.</p>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input disabled asp-for="Name" class="form-control" />
+                            <label asp-for="Name"></label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input disabled asp-for="Price" class="form-control" />
+                            <label asp-for="Price"></label>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <textarea disabled asp-for="Description" class="form-control" style="height: 100px;"></textarea>
+                            <label asp-for="Description"></label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input disabled asp-for="Sqft" class="form-control" />
+                            <label asp-for="Sqft"></label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input disabled asp-for="Occupancy" class="form-control" />
+                            <label asp-for="Occupancy"></label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input disabled asp-for="ImageUrl" class="form-control" />
+                            <label asp-for="ImageUrl"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-delete">
+                        <i class="bi bi-trash-fill"></i> Confirm Deletion
+                    </button>
+                    <a asp-action="Index" class="btn-cancel">
+                        <i class="bi bi-x-circle-fill"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <div class="image-section">
+            <h5 class="mb-3">Current Villa Image</h5>
+            <div class="villa-image-container">
+                @if (Model.ImageUrl!.Contains("placehold"))
+                {
+                    <img src="@Model.ImageUrl" class="villa-image" alt="Villa Image" />
+                }
+                else
+                {
+                    <img src="~/@Model.ImageUrl" class="villa-image" alt="Villa Image" />
+                }
+            </div>
+            <div class="image-deletion-note">
+                <i class="bi bi-trash-fill"></i>
+                <span>This image will be permanently deleted</span>
+            </div>
+        </div>
+    </div>
+</div>

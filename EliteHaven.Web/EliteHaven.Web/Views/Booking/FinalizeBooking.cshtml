@@ -1,0 +1,230 @@
+﻿@{
+    ViewData["Title"] = "Book Villa | Elite Haven";
+}
+@model Booking
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --light-gray: #F5F5F5;
+        --dark-gray: #333333;
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+    }
+
+    .booking-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .villa-detail-section {
+        padding: 2rem;
+        border-right: 1px solid var(--light-gray);
+    }
+
+    .booking-form-section {
+        padding: 2rem;
+        background: var(--light-gray);
+    }
+
+    .section-title {
+        color: var(--primary-blue);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-gold);
+        }
+
+    .modify-btn {
+        background: transparent;
+        color: var(--danger-red);
+        border: 1px solid var(--danger-red);
+        transition: all 0.3s ease;
+    }
+
+        .modify-btn:hover {
+            background: var(--danger-red);
+            color: white;
+        }
+
+    .total-price {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--accent-gold);
+        padding-top: 1rem;
+        margin-top: 1rem;
+        border-top: 1px solid var(--light-gray);
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: var(--dark-gray);
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        border-radius: 6px;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        margin-bottom: 1rem;
+    }
+
+        .form-control:disabled {
+            background-color: #f8f9fa;
+        }
+
+    .checkout-btn {
+        background: var(--success-green);
+        color: white;
+        padding: 0.75rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        width: 100%;
+        border: none;
+        margin-top: 1rem;
+    }
+
+        .checkout-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+        }
+
+    .sold-out-btn {
+        background: var(--danger-red);
+        color: white;
+        padding: 0.75rem;
+        border-radius: 6px;
+        font-weight: 500;
+        width: 100%;
+        border: none;
+        margin-top: 1rem;
+        opacity: 0.8;
+        cursor: not-allowed;
+    }
+
+    .validation-error {
+        color: var(--danger-red);
+        font-size: 0.85rem;
+        margin-top: -0.5rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    @@media (max-width: 992px) {
+        .villa-detail-section {
+            border-right: none;
+            border-bottom: 1px solid var(--light-gray);
+        }
+    }
+</style>
+
+<div class="container py-4">
+    <div class="booking-container">
+        <div class="row g-0">
+            <!-- Villa Details Section -->
+            <div class="col-lg-7">
+                <div class="villa-detail-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="section-title mb-0">Villa Details</h3>
+                        <a asp-action="Index" asp-controller="Home" class="btn modify-btn">
+                            <i class="bi bi-arrow-left-square"></i> Modify Selection
+                        </a>
+                    </div>
+
+                    <partial name="_VillaDetail" model="@Model.Villa" />
+
+                    <div class="total-price text-end">
+                        Booking Total: <span class="fw-bold">@Model.TotalCost.ToString("c")</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Form Section -->
+            <div class="col-lg-5">
+                <div class="booking-form-section">
+                    <form method="post">
+                        <input asp-for="VillaId" hidden />
+                        <input asp-for="UserId" hidden />
+                        <input type="datetime" asp-for="CheckInDate" hidden />
+                        <input asp-for="CheckOutDate" hidden />
+                        <input asp-for="Nights" hidden />
+
+                        <h3 class="section-title">Booking Details</h3>
+
+                        <div class="form-group">
+                            <label asp-for="Name" class="form-label">Full Name</label>
+                            <input asp-for="Name" class="form-control" placeholder="Enter your full name" />
+                            <span asp-validation-for="Name" class="validation-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Phone" class="form-label">Phone Number</label>
+                            <input asp-for="Phone" class="form-control" placeholder="Enter your phone number" />
+                            <span asp-validation-for="Phone" class="validation-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Email" class="form-label">Email Address</label>
+                            <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                            <span asp-validation-for="Email" class="validation-error"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Check-in Date</label>
+                                    <input type="text" value="@Model.CheckInDate.ToString("d")" disabled class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Check-out Date</label>
+                                    <input type="text" value="@Model.CheckOutDate.ToString("d")" disabled class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Number of Nights</label>
+                            <input asp-for="Nights" disabled class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            @if (Model.Villa!.IsAvailable)
+                            {
+                                <button type="submit" class="checkout-btn">
+                                    <i class="bi bi-check-circle"></i> Complete Booking
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="sold-out-btn" disabled>
+                                    <i class="bi bi-x-circle"></i> Currently Unavailable
+                                </button>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

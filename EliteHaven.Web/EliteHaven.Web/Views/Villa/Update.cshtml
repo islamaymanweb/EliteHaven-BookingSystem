@@ -1,0 +1,309 @@
+﻿@{
+    ViewData["Title"] = "Update Villa | Elite Haven";
+}
+@model Villa
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --light-gray: #F5F5F5;
+        --dark-gray: #333333;
+        --warning-orange: #fd7e14;
+        --danger-red: #dc3545;
+    }
+    a{
+        text-decoration:none;
+    }
+
+    .villa-update-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        border-top: 2px solid var(--secondary-blue);
+    }
+
+    .update-header {
+        background: linear-gradient(90deg, var(--primary-blue), var(--dark-teal));
+        color: white;
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .update-title {
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .update-body {
+        padding: 2rem;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .form-section {
+        flex: 1;
+        min-width: 300px;
+        padding-right: 2rem;
+    }
+
+    .image-section {
+        width: 300px;
+        padding-left: 2rem;
+        border-left: 1px solid var(--light-gray);
+    }
+
+    .image-preview {
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid var(--light-gray);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        aspect-ratio: 1/1;
+        object-fit: cover;
+    }
+
+    .form-floating label {
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .form-control {
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ced4da;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 0.25rem rgba(93, 183, 222, 0.25);
+        }
+
+    textarea.form-control {
+        min-height: 120px;
+    }
+
+    .file-upload {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .file-upload-label {
+        display: block;
+        font-weight: 500;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+    }
+
+    .file-upload-input {
+        width: 100%;
+        height: calc(2.5rem + 2px);
+        opacity: 0;
+        position: absolute;
+        z-index: 2;
+    }
+
+    .file-upload-display {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border: 1px dashed #ced4da;
+        border-radius: 6px;
+        background: var(--light-gray);
+    }
+
+    .file-upload-text {
+        margin-left: 0.5rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .update-btn {
+        background: var(--accent-gold);
+        color: var(--dark-gray);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .update-btn:hover {
+            background: var(--warning-orange);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .cancel-btn {
+        background: transparent;
+        color: var(--danger-red);
+        border: 1px solid var(--danger-red);
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .cancel-btn:hover {
+            background: var(--danger-red);
+            color: white;
+        }
+
+    .validation-summary {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 6px;
+        background-color: rgba(220, 53, 69, 0.1);
+    }
+
+        .validation-summary ul {
+            margin-bottom: 0;
+            padding-left: 1.5rem;
+        }
+
+    .validation-message {
+        color: var(--danger-red);
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+
+    @@media (max-width: 992px) {
+        .update-body {
+            flex-direction: column;
+        }
+
+        .form-section {
+            padding-right: 0;
+        }
+
+        .image-section {
+            width: 100%;
+            padding-left: 0;
+            padding-top: 2rem;
+            border-left: none;
+            border-top: 1px solid var(--light-gray);
+            margin-top: 2rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .update-body {
+            padding: 1.5rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+    }
+</style>
+
+<div class="villa-update-container container">
+    <div class="update-header text-center">
+        <h2 class="update-title"><i class="bi bi-house-gear"></i> Update Villa - @Model.Name</h2>
+    </div>
+
+    <div class="update-body">
+        <div class="form-section">
+            <form method="post" enctype="multipart/form-data">
+                <input asp-for="Id" hidden />
+                <input asp-for="ImageUrl" hidden />
+
+                @if (ViewData.ModelState.ErrorCount > 0)
+                {
+                    <div class="validation-summary" asp-validation-summary="All"></div>
+                }
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Name" class="form-control" placeholder="Villa Name" />
+                    <label asp-for="Name"></label>
+                    <span asp-validation-for="Name" class="validation-message"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <textarea asp-for="Description" class="form-control" placeholder="Description" style="height: 120px;"></textarea>
+                    <label asp-for="Description"></label>
+                    <span asp-validation-for="Description" class="validation-message"></span>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input asp-for="Price" class="form-control" placeholder="Price" />
+                            <label asp-for="Price"></label>
+                            <span asp-validation-for="Price" class="validation-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input asp-for="Sqft" class="form-control" placeholder="Square Feet" />
+                            <label asp-for="Sqft"></label>
+                            <span asp-validation-for="Sqft" class="validation-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input asp-for="Occupancy" class="form-control" placeholder="Occupancy" />
+                            <label asp-for="Occupancy"></label>
+                            <span asp-validation-for="Occupancy" class="validation-message"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="file-upload mb-3">
+                    <label class="file-upload-label">Update Villa Image</label>
+                    <input asp-for="Image" class="file-upload-input" id="fileInput" />
+                    <div class="file-upload-display">
+                        <i class="bi bi-cloud-arrow-up" style="font-size: 1.25rem;"></i>
+                        <span class="file-upload-text" id="fileName">Click to upload new image</span>
+                    </div>
+                    <span asp-validation-for="Image" class="validation-message"></span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="update-btn">
+                        <i class="bi bi-check-circle"></i> Update Villa
+                    </button>
+                    <a asp-action="Index" class="cancel-btn">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+
+     @*   <div class="image-section">
+            <div class="d-flex flex-column h-100">
+                <h5 class="mb-3">Current Image</h5>
+                @if (Model.ImageUrl!.Contains("placehold"))
+                {
+                    <img src="@Model.ImageUrl" class="image-preview" alt="Current Villa Image" />
+                }
+                else
+                {
+                    <img src="~/@Model.ImageUrl" class="image-preview" alt="Current Villa Image" />
+                }
+                <div class="mt-3 text-muted small">
+                    <i class="bi bi-info-circle"></i> Upload a new image to replace this one
+                </div>
+            </div>
+        </div>
+    </div>*@
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'Click to upload new image';
+            document.getElementById('fileName').textContent = fileName;
+        });
+    </script>
+}

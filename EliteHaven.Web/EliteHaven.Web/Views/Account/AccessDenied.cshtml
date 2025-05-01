@@ -1,0 +1,204 @@
+@{
+    ViewData["Title"] = "Access Denied | Elite Haven";
+}
+
+<style>
+    :root {
+        --primary-blue: #0A7EA3;
+        --secondary-blue: #5DB7DE;
+        --accent-gold: #D4AF37;
+        --light-azure: #E1F5FE;
+        --dark-teal: #00796B;
+        --pure-white: #FFFFFF;
+        --light-gray: #F5F5F5;
+        --dark-gray: #333333;
+    }
+
+    .error-hero {
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--light-azure) 0%, rgba(255,255,255,1) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .error-card {
+        width: 100%;
+        max-width: 600px;
+        background: var(--pure-white);
+        border-radius: 20px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+        z-index: 2;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .error-header {
+        background: linear-gradient(90deg, var(--primary-blue), var(--dark-teal));
+        padding: 2rem;
+        text-align: center;
+        color: white;
+        position: relative;
+    }
+
+    .error-header::after {
+        content: '';
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 25px solid transparent;
+        border-right: 25px solid transparent;
+        border-top: 25px solid var(--primary-blue);
+    }
+
+    .error-body {
+        padding: 3rem;
+        text-align: center;
+        position: relative;
+    }
+
+    .error-icon {
+        font-size: 5rem;
+        color: var(--primary-blue);
+        margin-bottom: 1.5rem;
+        animation: pulse 2s infinite;
+    }
+
+    .error-code {
+        font-size: 5rem;
+        font-weight: 800;
+        color: var(--primary-blue);
+        margin-bottom: 0.5rem;
+        line-height: 1;
+        background: linear-gradient(90deg, var(--primary-blue), var(--dark-teal));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        position: relative;
+    }
+
+    .error-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--dark-gray);
+        margin-bottom: 1rem;
+    }
+
+    .error-description {
+        color: var(--dark-gray);
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+        color: white;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(10, 126, 163, 0.3);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(10, 126, 163, 0.4);
+    }
+
+    .btn-outline {
+        background: transparent;
+        color: var(--primary-blue);
+        border: 2px solid var(--primary-blue);
+        padding: 0.8rem 2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .btn-outline:hover {
+        background: rgba(10, 126, 163, 0.1);
+        transform: translateY(-3px);
+    }
+
+    .error-graphic {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: linear-gradient(90deg, rgba(93, 183, 222, 0.1), rgba(212, 175, 55, 0.1));
+        z-index: -1;
+    }
+
+    .graphic-1 {
+        top: -150px;
+        right: -150px;
+    }
+
+    .graphic-2 {
+        bottom: -100px;
+        left: -100px;
+        width: 200px;
+        height: 200px;
+    }
+
+
+</style>
+
+<div class="error-hero">
+    <!-- Background Graphics -->
+    <div class="error-graphic graphic-1"></div>
+    <div class="error-graphic graphic-2"></div>
+    
+    <!-- Error Card -->
+    <div class="error-card">
+        <!-- Header -->
+        <div class="error-header">
+            <h2><i class="bi bi-shield-lock-fill me-2"></i>Access Restricted</h2>
+        </div>
+        
+        <!-- Body -->
+        <div class="error-body">
+            <div class="error-icon">
+                <i class="bi bi-lock-fill"></i>
+            </div>
+            
+            <h1 class="error-code">403</h1>
+            <h2 class="error-title">Permission Denied</h2>
+            
+            <p class="error-description">
+                You don't have sufficient permissions to access this page. 
+                If you believe this is an error, please contact our support team 
+                with details about what you were trying to access.
+            </p>
+            
+            <div class="error-actions">
+                <a asp-action="Index" asp-controller="Home" class="btn btn-primary">
+                    <i class="bi bi-house-door me-2"></i> Return Home
+                </a>
+                <a href="mailto:support@elitehaven.com" class="btn btn-outline">
+                    <i class="bi bi-headset me-2"></i> Contact Support
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
