@@ -5,16 +5,33 @@ Elite Haven is a premium villa booking platform that connects travelers with lux
 🏡 Luxury villa listings with detailed descriptions
 
 📅 Booking management system
+<div align="center">
+  <img src="screenshots/home.jpeg" alt="Home Page" width="400"/>
+</div>
 
 🔐 Role-based authentication (Admin/Customer)
+<div align="center">
+  <img src="screenshots/register.jpeg" alt="Home Page" width="400"/>
+</div>
 
 💳 Secure payment integration
 
+
+<div align="center">
+  <img src="screenshots/payment.jpeg" alt="Booking Page" width="400"/>
+</div>
 📱 Responsive design for all devices
 
 📊 Admin dashboard for property management
 
+<div align="center">
+  <img src="screenshots/Dashboard.jpeg" alt="Booking Page" width="400"/>
+</div>
 ⭐ Customer reviews and ratings
+
+<div align="center">
+  <img src="screenshots/home.jpeg" alt="Home Page" width="400"/>
+</div>
 
 🛠️ Technology Stack
 Backend
